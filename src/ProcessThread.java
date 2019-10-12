@@ -47,9 +47,6 @@ public class ProcessThread extends Thread {
 	}
 
 	private void processClient(Socket client2) throws Exception {
-		if (connOK == false)
-			return;
-		this.sendMsg2Me("connection established with server");
 		if (readFirstMsg()) {
 			ChatTools.addPT(this.myUserName, this);
 			while (connOK) {
@@ -86,12 +83,12 @@ public class ProcessThread extends Thread {
 	private String getXMLValue(String flagName, String xmlMsg) throws Exception {
 		try {
 			int start = xmlMsg.indexOf("<" + flagName + ">");
-			start += flagName.length() + 2;
+			start += flagName.length()+ 2;
 			int end = xmlMsg.indexOf("</" + flagName + ">");
 			String value = xmlMsg.substring(start, end).trim();
 			return value;
 		} catch (Exception ef) {
-			throw new Exception("Analyze " + flagName + " failure: " + xmlMsg);
+			throw new Exception("Analyze " + flagName + " failure: " + xmlMsg + " error: " + ef.getMessage()) ;
 		}
 	}
 
@@ -110,7 +107,7 @@ public class ProcessThread extends Thread {
 			this.client.close();
 		}
 		if (type.equals("login")) {
-			this.myUserName = this.getXMLValue("login", msg);
+			this.myUserName = this.getXMLValue("name", msg);
 			String pwd = this.getXMLValue("pwd", msg);
 			int state = -1;
 			if (ServerDao.hasUser(this.myUserName, pwd)) {
