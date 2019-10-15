@@ -1,12 +1,10 @@
-import java.util.Collection;
+package server;
+
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.swing.SwingUtilities;
 
 import message.IMsgConstance;
 import message.MsgAddFriend;
@@ -33,17 +31,7 @@ public class ChatTools {
 
 	}
 
-	/**
-	 * be aware of synchronization problems
-	 * 
-	 * @return
-	 */
-//	public static List<ProcessThread> getAllThread() {
-//		List<ProcessThread> list = new LinkedList<ProcessThread>();
-//		// not thread safe ?
-//		list.addAll(pts.values());
-//		return list;
-//	}
+
 
 	
 	 public static void addClient(UserInfo user, ServerThread ct) {
@@ -52,64 +40,12 @@ public class ChatTools {
 	
 	 }
 
-	// /**
-	// * Remove all clients of a particular user.
-	// *
-	// * @param user
-	// */
-	// public static void removeAllClient(UserInfo user) {
-	// for (ProcessThread ct : stList)
-	// if (ct.getOwnerUser().getName().equals(user.getName())) {
-	// ct.closeMe();
-	// stList.remove(ct);
-	// ct = null;
-	// castMsg(user, "I am down");
-	// }
-	// }
-	//
-	//
 
-	
-	/**
-	 * not thread safe
-	 */
-//	public static void removeAllClient() {
-//		try {
-//			for (ProcessThread pt : pts.values()){
-//				pt.sendMsg2Me("System Notification: Server Shutting Down");
-//				pt.closeMe();
-//				pts.remove(pt.getMyUserName());
-//				System.out.println(pt.getMyUserName() + " disconnected");
-//			}
-//		} catch (Exception ef) {
-//			ef.printStackTrace();
-//		}
-//	}
-	
-	//
-	//
-	// public static void castAsSystem(String msg){
-	// UserInfo user = new UserInfo();
-	// user.setName("system");
-	// user.setPwd("pwd");
-	// ChatTools.castMsg(user, msg);
-	// }
-	//
-	// public static void castMsg(UserInfo sender, String msg) {
-	// msg = sender.getName() + " says: " + msg;
-	// for (int i = 0; i < stList.size(); i++) {
-	// ProcessThread st = stList.get(i);
-	// try {
-	// st.sendMsg2Me(msg);
-	// } catch (Exception e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-	// }
+
 
 	public static void removeClient(UserInfo user) {
 		ServerThread ct = stList.remove(user);
+		if (ct == null) return;
 		ct.disConn();
 		ct = null;
 		sendOnOffLineMsg(user,false);
@@ -188,43 +124,6 @@ public class ChatTools {
 			}
 		}
 	}
-//	public static void castMsg(String userName, String msg, String destUserName) {
-//		for (int i = 0; i < pts.size(); i++) {
-//			ProcessThread pt = pts.get(destUserName);
-//			try {
-//				if (null != pt & pt.getMyUserName().equals(destUserName)) {
-//					pt.sendMsg2Me(msg);
-//					break;
-//				}
-//			} catch (Exception ef) {
-//				ef.printStackTrace();
-//			}
-//		}
-//
-//	}
-//
-//	public static void castAsSystem(String msg) {
-//		for (ProcessThread pt : pts.values()) {
-//			pt.sendMsg2Me(msg);
-//		}
-//	}
-//
-//	public static void addPT(String userName, ProcessThread pt) {
-//		pts.put(userName, pt);
-//		Set<String> set = pts.keySet();
-//		Iterator<String> it = set.iterator();
-//		String names = "";
-//		String onlineMsg = "<msg><type>onLine</type>";
-//		String onlineContent = onlineMsg + "<user>" + userName + "</user></msg>";
-//		while (it.hasNext()) {
-//			String nextName = it.next();
-//			pts.get(nextName).sendMsg2Me(onlineContent);
-//			names += "," + nextName;
-//		}
-//		String head = "<msg><type>buddyList</type>";
-//		String content = "<users>" + names + "</users>";
-//		String buddyListMsg = head + content + "</msg>";
-//		pt.sendMsg2Me(buddyListMsg);
-//	}
+
 
 }

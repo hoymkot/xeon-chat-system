@@ -45,7 +45,7 @@ public class StartClientLoginUI {
 		JButton bu_login = new JButton("Login");
 		bu_login.setActionCommand("login");
 		JButton bu_reg = new JButton("Register");
-		bu_login.setActionCommand("reg");
+		bu_reg.setActionCommand("reg");
 
 		ActionListener buttonAction = new ActionListener() {
 

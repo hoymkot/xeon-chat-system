@@ -1,9 +1,10 @@
 package type;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserInfo {
+public class UserInfo implements Serializable {
 
 	public UserInfo(int jkNum, String nickName) {
 		this.jkNum = jkNum;

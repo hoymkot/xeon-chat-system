@@ -1,12 +1,8 @@
-import java.io.BufferedReader;
+package server;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.Date;
 import java.util.List;
 
 import log.LogTools;
@@ -63,13 +59,15 @@ public class ServerThread extends Thread {
 
 	private boolean checkLogin(MsgLogin msg) {
 		ownerUser = UserDao.checkLogin(msg.getSrc(), msg.getPwd());
+		MsgLoginResp mlr = new MsgLoginResp();
+		mlr.setTotalLen(4 + 1 + 4 + 4 + 1);
+		mlr.setType(IMsgConstance.command_login_resp);
+		mlr.setSrc(IMsgConstance.Server_JK_NUMBER);
+		
 		if (ownerUser != null) {
-			MsgLoginResp mlr = new MsgLoginResp();
-			mlr.setTotalLen(4 + 1 + 4 + 4 + 1);
-			mlr.setType(IMsgConstance.command_login_resp);
-			mlr.setSrc(IMsgConstance.Server_JK_NUMBER);
 			mlr.setDest(ownerUser.getJkNum());
 			mlr.setState((byte) 0);
+			
 			this.sendMsg2Me(mlr);
 			MsgTeamList mt = new MsgTeamList();
 			int len = 4 + 1 + 4 + 4 + 4;
@@ -86,6 +84,11 @@ public class ServerThread extends Thread {
 			mt.setTeamLists(ownerUser.getTeams());
 			this.sendMsg2Me(mt);
 			return true;
+		} else {
+			mlr.setDest(0);
+			mlr.setState((byte) 1);
+			this.sendMsg2Me(mlr);
+			
 		}
 		this.disConn();
 		return false;

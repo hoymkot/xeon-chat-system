@@ -47,7 +47,7 @@ public class ToolParseMsg {
 			mr.setNickName(nickName);
 			mr.setPwd(pwd);
 			return mr;
-		} else if (msgType == IMsgConstance.command_login_resp) {
+		} else if (msgType == IMsgConstance.command_reg_resp) {
 			byte state = dins.readByte();
 			MsgRegResp ml = new MsgRegResp();
 			copyHead(msgHead, ml);
