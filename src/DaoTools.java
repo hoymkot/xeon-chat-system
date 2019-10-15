@@ -1,6 +1,8 @@
 import java.util.HashMap;
 import java.util.Map;
 
+import type.UserInfo;
+
 public class DaoTools {
 
 	public static boolean checkLogin(UserInfo user){

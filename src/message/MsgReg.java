@@ -15,5 +15,9 @@ public class MsgReg extends MsgHead {
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
+	public String toString() {
+		String head= super.toString();
+		return head + " pwd: " + pwd + " nickName: " + nickName;
+	}
 	
 }

@@ -1,10 +1,19 @@
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
+
+import message.MsgHead;
+import message.ToolsCreateMsg;
+import type.UserInfo;
 
 public class ProcessThread extends Thread {
 
 	private java.net.Socket client;
 	private java.io.OutputStream ous;
 	private java.io.InputStream ins;
+	private DataInputStream dins;
+	private DataOutputStream dous;
 	private String myUserName;
 	UserInfo user;
 	private boolean connOK = false;
@@ -13,18 +22,28 @@ public class ProcessThread extends Thread {
 		this.client = client;
 		ous = client.getOutputStream();
 		ins = client.getInputStream();
+		dous = new DataOutputStream(ous);
+		dins = new DataInputStream(ins);
 		connOK = true;
 	}
 
 	public void run() {
 		try {
-			processClient(this.client);
+			processClient();
 
 		} catch (Exception ef) {
 			ef.printStackTrace();
 		}
-		ChatTools.removeUser(this.myUserName);
+//		ChatTools.removeUser(this.myUserName);
 
+	}
+
+	private MsgHead receiveData() throws Exception {
+		int len = dins.readInt();
+		byte[] data = new byte[len - 4];
+		dins.readFully(data);
+		MsgHead msg = MsgHead.parseMsg(data);
+		return msg;
 	}
 
 	public void closeMe() {
@@ -38,91 +57,24 @@ public class ProcessThread extends Thread {
 
 	}
 
-	public void sendMsg2Me(String msg) {
-		try {
-			ous.write(msg.getBytes());
-		} catch (Exception ef) {
-			connOK = false;
+	public boolean sendMsg2Me(MsgHead msg) throws IOException {
+		byte[] data = ToolsCreateMsg.packMsg(msg);
+		dous.write(data);
+		dous.flush();
+		return true;
+	}
+
+	private void processClient() throws Exception {
+
+//		ChatTools.addPT(this.myUserName, this);
+		while (connOK) {
+			MsgHead msg = this.receiveData();
 		}
 	}
 
-	private void processClient(Socket client2) throws Exception {
-		if (readFirstMsg()) {
-			ChatTools.addPT(this.myUserName, this);
-			while (connOK) {
-				String msg = readString();
-				String type = getXMLValue("type", msg);
-				if (type.equals("chat")) {
-					String destUserName = getXMLValue("receiver", msg);
-					ChatTools.castMsg(this.myUserName, msg, destUserName);
-				} else {
-					System.out.println("unknown Msg type: " + type);
-				}
-			}
-		}
-	}
 
-	private String readString() throws Exception {
-		String msg = "";
-		int i = ins.read();
-		StringBuffer stb = new StringBuffer();
-		boolean end = false;
-		while (!end) {
-			char c = (char) i;
-			stb.append(c);
-			msg = stb.toString().trim();
-			if (msg.endsWith("</msg>"))
-				break;
-			i = ins.read();
-		}
-		msg = new String(msg.getBytes("ISO-8859-1"), "GBK").trim();
-		return msg;
 
-	}
-
-	private String getXMLValue(String flagName, String xmlMsg) throws Exception {
-		try {
-			int start = xmlMsg.indexOf("<" + flagName + ">");
-			start += flagName.length()+ 2;
-			int end = xmlMsg.indexOf("</" + flagName + ">");
-			String value = xmlMsg.substring(start, end).trim();
-			return value;
-		} catch (Exception ef) {
-			throw new Exception("Analyze " + flagName + " failure: " + xmlMsg + " error: " + ef.getMessage()) ;
-		}
-	}
-
-	private boolean readFirstMsg() throws Exception {
-		String msg = readString();
-		String type = getXMLValue("type", msg);
-		if (type.equals("reg")) {
-			myUserName = this.getXMLValue("name", msg);
-			String pwd = this.getXMLValue("pwd", msg);
-			int state = -1;
-			if (ServerDao.saveUser(this.myUserName, pwd)) {
-				state = 0;
-			}
-			String resp = "<msg><type>regResp</type><state>" + state + "</state></msg>";
-			sendMsg2Me(resp);
-			this.client.close();
-		}
-		if (type.equals("login")) {
-			this.myUserName = this.getXMLValue("name", msg);
-			String pwd = this.getXMLValue("pwd", msg);
-			int state = -1;
-			if (ServerDao.hasUser(this.myUserName, pwd)) {
-				state = 0;
-			}
-			String resp = "<msg><type>loginResp</type><state>" + state + "</state></msg>";
-			sendMsg2Me(resp);
-			if (state == -1) {
-				this.client.close();
-			} else {
-				return true;
-			}
-		}
-		return false;
-	}
+	
 
 	public Object getMyUserName() {
 		return this.myUserName;

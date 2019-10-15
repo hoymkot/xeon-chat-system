@@ -1,5 +1,8 @@
 package message;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+
 public class MsgHead {
 	private int totalLen;
 	private byte type;
@@ -17,10 +20,10 @@ public class MsgHead {
 	public void setType(byte type) {
 		this.type = type;
 	}
-	public int getDesc() {
+	public int getDest() {
 		return desc;
 	}
-	public void setDesc(int desc) {
+	public void setDest(int desc) {
 		this.desc = desc;
 	}
 	public int getSrc() {

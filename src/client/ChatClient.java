@@ -3,6 +3,7 @@ package client;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
@@ -11,20 +12,7 @@ import java.util.Scanner;
 public class ChatClient {
 	private DataOutputStream dous;
 
-	private void writeString(DataOutputStream out, String str, int len) {
-		try {
-			byte[] data = str.getBytes();
-			out.write(data);
-			while (len > data.length) {
-				out.writeByte('\0');
-				len--;
-			}
 
-		} catch (Exception ef) {
-			ef.printStackTrace();
-		}
-		;
-	}
 
 	private void sendTextMsg(String msg, int destNum) {
 		try {
@@ -51,12 +39,12 @@ public class ChatClient {
 			dous.writeByte(2);
 			dous.writeInt(destNum);
 			String shortFileName = file.getName();
-			writeString(dous, shortFileName,256);
-			byte[] fileData=new byte[fileDataLen];
+			writeString(dous, shortFileName, 256);
+			byte[] fileData = new byte[fileDataLen];
 			ins.read(fileData);
 			dous.write(fileData);
 			dous.flush();
-			
+
 		} catch (Exception ef) {
 			ef.printStackTrace();
 		}
@@ -82,14 +70,13 @@ public class ChatClient {
 					sendFileMsg("e:\\netjavalogo.gif", 8888);
 				}
 				testCount++;
-				
 
 			}
 		} catch (Exception ef) {
 			ef.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
 		ChatClient qqc = new ChatClient();
 		qqc.conn2Server("localhost", 9090);
