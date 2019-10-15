@@ -76,8 +76,6 @@ public class ChatTools {
 	public synchronized static void sendMsg2One(UserInfo srcUser, MsgHead msg) {
 		if (msg.getType() == IMsgConstance.command_find) {
 			Set<UserInfo > users = stList.keySet();
-			
-			
 			Iterator<UserInfo> its = users.iterator();
 			MsgFindResp mfr = new MsgFindResp();
 			mfr.setType(IMsgConstance.command_find_resp);

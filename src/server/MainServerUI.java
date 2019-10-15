@@ -1,3 +1,4 @@
+package server;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -15,8 +16,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-
-import server.ChatTools;
 
 public class MainServerUI {
 	private ChatServer cserver;

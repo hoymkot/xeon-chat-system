@@ -81,6 +81,7 @@ public class MainUIClient extends JFrame implements IClientMsgListener {
 			public void actionPerformed(ActionEvent e) {
 				String com = e.getActionCommand();
 				if(com.equals("exit")) {
+					// TODO: go offline;
 					System.exit(0);
 				} 
 				if(com.equals("find")) {
