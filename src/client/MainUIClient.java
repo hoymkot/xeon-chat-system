@@ -91,7 +91,7 @@ public class MainUIClient extends JFrame implements IClientMsgListener {
 		};
 		
 		mi_find.addActionListener(al);
-		mi_find.addActionListener(al);
+		mi_exit.addActionListener(al);
 		mb.add(me_file);
 		return mb;
 	}
