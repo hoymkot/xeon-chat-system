@@ -40,7 +40,7 @@ public class JKUserTree extends JTree {
 		this.setModel(tm);
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				if (2 == e.getClickCount()) {
+				if (2== e.getClickCount()) {
 					showSendFrame();
 				}
 			}
@@ -99,9 +99,11 @@ public class JKUserTree extends JTree {
 			jda.setSize(200,150);
 			FlowLayout fl = new FlowLayout();
 			jda.setLayout(fl);
-			JLabel la = new JLabel("please enter your message and press the enter key");
+			JLabel la = new JLabel("enter your message to " + destUser.getName());
 			jda.add(la);
-			JTextField jta = new JTextField(15);
+			final JTextField jta = new JTextField(15);
+			jda.add(jta);
+			jda.setVisible(true);
 			jta.addActionListener(new ActionListener() {
 
 				@Override
@@ -116,6 +118,7 @@ public class JKUserTree extends JTree {
 					try {
 						conn.sendMsg(mct);
 					} catch (Exception e) {
+						e.printStackTrace();
 						LogTools.ERROR(this.getClass(), "send error " + e);
 					}
 					jda.dispose();

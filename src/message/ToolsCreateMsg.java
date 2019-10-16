@@ -29,8 +29,8 @@ public class ToolsCreateMsg {
 			MsgRegResp mlr = (MsgRegResp) msg;
 			dous.writeByte(mlr.getState());
 		} else if (msgType == IMsgConstance.command_chatText) {
-			MsgRegResp mlr = (MsgRegResp) msg;
-			dous.writeByte(mlr.getState());
+			MsgChatText mlr = (MsgChatText) msg;
+			dous.write(mlr.getMsgContent().getBytes(), 0, mlr.getMsgContent().length());
 		} else if (msgType == IMsgConstance.command_chatFile) {
 			MsgChatFile mt = (MsgChatFile) msg;
 			writeString(dous, mt.getFileName(), 256);
