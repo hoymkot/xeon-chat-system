@@ -35,14 +35,6 @@ public class ToolsCreateMsg {
 			MsgChatFile mt = (MsgChatFile) msg;
 			writeString(dous, mt.getFileName(), 256);
 			dous.write(mt.getFileData());
-		} else if (msgType == IMsgConstance.command_find_resp) {
-			MsgFindResp mf = (MsgFindResp) msg;
-			List<UserInfo> users = mf.getUsers();
-			dous.writeInt(users.size());
-			for (UserInfo user : users) {
-				writeString(dous, user.getName(), 10);
-				dous.writeInt(user.getJkNum());
-			}
 		} else if (msgType == IMsgConstance.command_teamList) {
 			MsgTeamList mdb = (MsgTeamList) msg;
 			List<TeamInfo> teams = mdb.getTeamLists();
@@ -62,11 +54,11 @@ public class ToolsCreateMsg {
 			dous.writeInt(mt.getFriendJkNum());
 		} else if (msgType == IMsgConstance.command_addFriend_Resp) {
 			MsgAddFriendResp mt = (MsgAddFriendResp) msg;
+			dous.writeByte(mt.getState());
 			writeString(dous, mt.getFriendNickName(), 10);
 			dous.writeInt(mt.getFriendJkNum());
 		} else if (msgType == IMsgConstance.command_offLine 
-				|| msgType == IMsgConstance.command_onLine
-				|| msgType == IMsgConstance.command_find) {
+				|| msgType == IMsgConstance.command_onLine) {
 		} else {
 			String logMsg = "unknown message type, unable to pack " + msgType;
 			LogTools.ERROR(ToolsCreateMsg.class, logMsg);

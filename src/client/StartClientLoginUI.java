@@ -16,7 +16,7 @@ import javax.swing.text.MaskFormatter;
 public class StartClientLoginUI {
 	private JFrame jf_login;
 
-	private JFormattedTextField jta_jkNum;
+	private JTextField jta_jkNum;
 	private JTextField jta_pwd;
 
 	private ClientConnection conn = ClientConnection.getIns();
@@ -27,9 +27,10 @@ public class StartClientLoginUI {
 		jf_login.setLayout(fl);
 		jf_login.setSize(200, 160);
 
-		MaskFormatter mfName = new MaskFormatter("##########");
-		jta_jkNum = new JFormattedTextField();
-		mfName.install(jta_jkNum);
+//		MaskFormatter mfName = new MaskFormatter("##########");
+//		jta_jkNum = new JFormattedTextField();
+		jta_jkNum = new JTextField();
+//		mfName.install(jta_jkNum);
 		jta_jkNum.setColumns(10);
 		jta_pwd = new JPasswordField(12);
 		jta_pwd.setColumns(10);
@@ -48,7 +49,6 @@ public class StartClientLoginUI {
 		bu_reg.setActionCommand("reg");
 
 		ActionListener buttonAction = new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String command = e.getActionCommand();
@@ -58,9 +58,7 @@ public class StartClientLoginUI {
 				if (command.equals("reg")) {
 					showRegForm();
 				}
-
 			}
-
 		};
 
 		bu_login.addActionListener(buttonAction);
@@ -94,7 +92,6 @@ public class StartClientLoginUI {
 		jf_reg.setVisible(true);
 
 		ActionListener buttonAction = new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String nickName = jta_regNickName.getText().trim();
@@ -106,12 +103,14 @@ public class StartClientLoginUI {
 					if (jkNum != -1) {
 						s = "registration success: " + jkNum;
 					}
-				}
-				JOptionPane.showMessageDialog(jf_reg, s);
-				conn.closeMe();
-				jf_reg.dispose();
-			}
+					JOptionPane.showMessageDialog(jf_reg, s);
+					conn.closeMe();
+				} else {
+					JOptionPane.showMessageDialog(jf_login, "cannot reach server , please check internet connection");
 
+				}
+				
+			}
 		};
 
 		bu_reg.addActionListener(buttonAction);
@@ -132,6 +131,8 @@ public class StartClientLoginUI {
 				conn.closeMe();
 				JOptionPane.showMessageDialog(jf_login, "fail to login, please make user id and password are correct");
 			}
+		} else {
+			JOptionPane.showMessageDialog(jf_login, "cannot reach server , please check internet connection");
 		}
 	}
 		

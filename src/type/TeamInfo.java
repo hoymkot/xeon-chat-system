@@ -55,4 +55,6 @@ public class TeamInfo implements Serializable {
 	public void addBuddy(UserInfo buddy) {
 		this.buddyList.add(buddy);
 	}
+	
+
 }

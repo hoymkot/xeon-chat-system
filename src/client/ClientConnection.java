@@ -9,6 +9,8 @@ import java.util.List;
 
 import log.LogTools;
 import message.IMsgConstance;
+import message.MsgAddFriend;
+import message.MsgAddFriendResp;
 import message.MsgHead;
 import message.MsgLogin;
 import message.MsgLoginResp;
@@ -46,6 +48,23 @@ public class ClientConnection extends Thread {
 			return false;
 		}
 	
+	}
+	
+	public boolean addUser(int id, int srcId) {
+		try {
+			MsgAddFriend maf = new MsgAddFriend () ;
+			maf.setTotalLen(4+1+4+4+4);
+			maf.setType(IMsgConstance.command_addFriend);
+			maf.setDest(IMsgConstance.Server_JK_NUMBER);
+			maf.setSrc(srcId);
+			maf.setFriendJkNum(id);
+			this.sendMsg(maf);
+			return true;
+			
+		} catch (Exception ef) {
+			ef.printStackTrace();
+		}
+		return false;
 	}
 	
 	public int regServer(String nickName, String pwd) {
@@ -92,7 +111,7 @@ public class ClientConnection extends Thread {
 	public void run() {
 		while(true) {
 			try {
-			MsgHead m = readFromServer();
+				MsgHead m = readFromServer();
 			for (IClientMsgListener lis : listeners) {
 				lis.fireMsg(m);
 			}

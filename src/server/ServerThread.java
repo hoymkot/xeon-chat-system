@@ -107,6 +107,7 @@ public class ServerThread extends Thread {
 				ChatTools.sendMsg2One(this.ownerUser, msg);
 			}
 		} catch (Exception ef) {
+			ef.printStackTrace();
 			LogTools.ERROR(this.getClass(), "Server Message Read Error: " + ef);
 		}
 		ChatTools.removeClient(this.ownerUser);

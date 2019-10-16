@@ -61,10 +61,14 @@ public class JKUserTree extends JTree {
 			}
 		} else if (m.getType() == IMsgConstance.command_addFriend_Resp) {
 			MsgAddFriendResp mf = (MsgAddFriendResp) m;
-			UserInfo buddy = new UserInfo(mf.getFriendJkNum());
-			buddy.setName(mf.getFriendNickName());
-			DefaultMutableTreeNode node = new DefaultMutableTreeNode(buddy);
-			root.add(node);
+			if (mf.getFriendNickName().trim().equals("") ) {
+				JOptionPane.showMessageDialog(null, " unable to add friend "  + mf.getFriendJkNum());
+			} else {
+				UserInfo buddy = new UserInfo(mf.getFriendJkNum());
+				buddy.setName(mf.getFriendNickName());
+				DefaultMutableTreeNode node = new DefaultMutableTreeNode(buddy);
+				root.add(node);
+			}
 		} else if (m.getType() == IMsgConstance.command_chatText) {
 			MsgChatText mt = (MsgChatText) m;
 			JOptionPane.showMessageDialog(this, mt.getSrc() + " says " + mt.getMsgContent());

@@ -17,8 +17,6 @@ import log.LogTools;
 
 public class UserDao {
 	
-	
-	
 	public static UserInfo checkLogin(int jkNum, String pwd) {
 		UserInfo user = userDB.get(jkNum);
 		if (null!= user&& user.getPwd().equals(pwd)) {
@@ -57,8 +55,12 @@ public class UserDao {
 	}
 	
 	public static UserInfo addFriend(int srcJKNum, int destJKNum) {
+		if (srcJKNum == destJKNum) return null;
 		UserInfo user1 = userDB.get(srcJKNum);
 		UserInfo user2 = userDB.get(destJKNum);
+		
+		if (user2 == null ) return null;
+		if (user1.isBuddy(user2)) return null;  // already friends
 		user1.getTeams().get(0).addBuddy(user2);
 		user2.getTeams().get(0).addBuddy(user1);
 		saveDB();

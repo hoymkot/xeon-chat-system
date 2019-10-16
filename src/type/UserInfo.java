@@ -46,5 +46,13 @@ public class UserInfo implements Serializable {
 	public void addTeams(TeamInfo team) {
 		this.getTeams().add(team);
 	}
+	public boolean isBuddy(UserInfo buddy) {
+		for (TeamInfo team : this.getTeams()) {
+			if (teams.contains(buddy)) {
+				return true;
+			};
+		}
+		return false;
+	}
 	
 }

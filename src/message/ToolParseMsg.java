@@ -70,16 +70,6 @@ public class ToolParseMsg {
 			dins.readFully(fileData);
 			ml.setFileData(fileData);
 			return ml;
-		} else if (msgType == IMsgConstance.command_find_resp) {
-			MsgFindResp mf = new MsgFindResp();
-			copyHead(msgHead, mf);
-			int userCount = dins.readInt();
-			for (int i = 0; i < userCount; i++) {
-				String nickName = readString(dins, 10);
-				int jkNum = dins.readInt();
-				UserInfo user = new UserInfo(jkNum, nickName);
-				mf.addUserInfo(user);
-			}
 		} else if (msgType == IMsgConstance.command_teamList) {
 
 			MsgTeamList mbl = new MsgTeamList();
@@ -114,12 +104,14 @@ public class ToolParseMsg {
 		} else if (msgType == IMsgConstance.command_addFriend_Resp) {
 			MsgAddFriendResp mfr = new MsgAddFriendResp();
 			copyHead(msgHead, mfr);
-			int jkNum = dins.readInt();
+			byte state = dins.readByte();
+			mfr.setState(state);		
 			String nkName = readString(dins, 10);
+			int jkNum = dins.readInt();
 			mfr.setFriendJkNum(jkNum);
 			mfr.setFriendNickName(nkName);
 			return mfr;
-		}else if (msgType == IMsgConstance.command_offLine || msgType == IMsgConstance.command_onLine || msgType == IMsgConstance.command_find) {
+		}else if (msgType == IMsgConstance.command_offLine || msgType == IMsgConstance.command_onLine ) {
 			return msgHead;
 			
 		} else {
