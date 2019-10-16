@@ -69,10 +69,12 @@ public class ChatTools {
 			mar.setType(IMsgConstance.command_addFriend_Resp);
 			mar.setState((byte) 0);
 			if (destUser != null) {
+				// if the other user has registered 
 				mar.setFriendJkNum(destUser.getJkNum());
 				mar.setFriendNickName(destUser.getName());
 				stList.get(srcUser).sendMsg2Me(mar);
-				if (stList.get(destUser) != null) {
+				if (stList.get(destUser) != null) { 
+					// if the other user is currently online
 					mar.setDest(destUser.getJkNum());
 					mar.setSrc(msg.getDest());
 					mar.setFriendJkNum(srcUser.getJkNum());

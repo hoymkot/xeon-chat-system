@@ -61,4 +61,8 @@ public class UserInfo implements Serializable {
 		return this.getJkNum() == u.getJkNum();
 		
 	}
+	@Override
+	public String toString() {
+		return this.getName();
+	}
 }
