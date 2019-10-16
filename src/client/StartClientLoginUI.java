@@ -105,6 +105,7 @@ public class StartClientLoginUI {
 					}
 					JOptionPane.showMessageDialog(jf_reg, s);
 					conn.closeMe();
+					jf_reg.dispose();
 				} else {
 					JOptionPane.showMessageDialog(jf_login, "cannot reach server , please check internet connection");
 
@@ -118,7 +119,13 @@ public class StartClientLoginUI {
 	
 	private void loginAction() {
 		String jkStr = jta_jkNum.getText().trim();
-		int jkNum = Integer.parseInt(jkStr);
+		int jkNum;
+		try {
+		jkNum = Integer.parseInt(jkStr);
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(jf_login, "user id must be a number");
+			return;
+		}
 		String pwd = jta_pwd.getText();
 		if (conn.conn2Server()) {
 			if(conn.loginServer(jkNum, pwd)) {
